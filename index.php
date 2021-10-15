@@ -1,13 +1,10 @@
-<!DOCTYPE html>
+<?php
+	include(__DIR__ . '/lib/list.php');
+	$list = new NRDList();
+?><!DOCTYPE html>
 <html>
 	<?php
 		$ProjectVersionNumber = 1.0;
-		include "MYSQL.php";
-
-		$db = mysqli_connect($MYSQL_HOSTIP,$MYSQL_USER,$MYSQL_PASS,$MYSQL_DATABASE);
-		if(!$db) {
-		  	exit("Datenbank nicht erreichbar. Verbindungsfehler: ".mysqli_connect_error());
-		}
 	?>
 	<head>
 		<title>
@@ -44,30 +41,34 @@
 			</div>
 
 			<div class="table">
-				<?php 
-					$ergebnis = mysqli_query($db,"SELECT * FROM NoResponsibleDisclosure ORDER BY Name ASC"); 
-					$ergebnis = mysqli_fetch_all($ergebnis);
-					$count = 0;
-					while($ergebnis[$count] !== null) {
-						echo '<div class="element">';
-						echo '<div class="name">'.$ergebnis[$count][1].'</div>';
-						echo '<div class="timeframeyear">'.$ergebnis[$count][2].'</div>';
-						echo '<div class="proof"><a target="_blank" rel="nofollow" href="'.$ergebnis[$count][3].'">Newsartikel</a></div>';
-						echo '</div>';
-						$count = $count + 1;
+				<?php
+					foreach($list->getEntries() AS $entry) {
+						?>
+						<div class="element">
+							<div class="name"><?php echo $entry->name ?></div>
+							<div class="timeframeyear"><?php echo $entry->year ?></div>
+							<div class="proof">
+								<?php
+									echo implode(", ", array_map(function ($proof) {
+										return '<a target="_blank" rel="nofollow" href="' . $proof . '">Newsartikel</a>';
+									}, $entry->proofs));
+								?>
+							</div>
+						</div>
+						<?php
 					}
 				?>
 			</div>
 			<div class="table-insert" id="add-entry">
 				<h2>Daten hinzufügen</h2>
-				<form>
+				<form method="post">
 					<div class="table-insert-name">
 						<h3>Name der Organisation/Firma:</h3>
 						<input type="text" name="organization">
 					</div>
 					<div class="table-insert-year">
 						<h3>Jahr des Zwischenfalls:</h3>
-						<input type="number" name="year">
+						<input type="number" name="year" min="1990" max="<?php echo date('Y') ?>" value="<?php echo date('Y') ?>">
 					</div>
 					<div class="table-insert-proof">
 						<h3>Link als Beweis (News oder ähnliches):</h3>
@@ -77,18 +78,8 @@
 				</form>
 
 				<?php
-					if($_GET["organization"] != NULL && $_GET["year"] != NULL && $_GET["proof"] != NULL) {
-						$proof = htmlspecialchars($_GET['proof'], ENT_QUOTES);
-						$year = htmlspecialchars($_GET['year'], ENT_QUOTES);
-						$name = htmlspecialchars($_GET['organization'], ENT_QUOTES);
-						$query = "INSERT INTO db71866.NoResponsibleDisclosure (Name,TimeframeYear,Link) VALUES ('".$name."',".$year.",'".$proof."')";
-						$check = mysqli_query($db,$query);
-						if($check) {
-							echo "success";
-						}
-						else { 
-							echo "Error. Please contact Webmaster via E-Mail.";
-						}
+					if(@$_POST["organization"] != NULL && @$_POST["year"] != NULL && @$_POST["proof"] != NULL) {
+						$list->addEntry($_POST["organization"], $_POST["year"], $_POST["proof"]);
 					}
 				?>
 			</div>

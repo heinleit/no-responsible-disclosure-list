@@ -1,0 +1,6 @@
+{
+    "require": {
+        "dallgoot/yaml": "^0.3.2",
+        "czproject/git-php": "^4.0"
+    }
+}

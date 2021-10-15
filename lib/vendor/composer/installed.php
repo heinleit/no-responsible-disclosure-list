@@ -1,0 +1,41 @@
+<?php return array(
+    'root' => array(
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'type' => 'library',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'reference' => NULL,
+        'name' => '__root__',
+        'dev' => true,
+    ),
+    'versions' => array(
+        '__root__' => array(
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'reference' => NULL,
+            'dev_requirement' => false,
+        ),
+        'czproject/git-php' => array(
+            'pretty_version' => 'v4.0.2',
+            'version' => '4.0.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../czproject/git-php',
+            'aliases' => array(),
+            'reference' => '32505124ef2a8651f10a5afebace58f85eff2f93',
+            'dev_requirement' => false,
+        ),
+        'dallgoot/yaml' => array(
+            'pretty_version' => 'v0.3.2',
+            'version' => '0.3.2.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../dallgoot/yaml',
+            'aliases' => array(),
+            'reference' => '505ce0f23b40767d3016ea16e1f101085f3a63c0',
+            'dev_requirement' => false,
+        ),
+    ),
+);
